@@ -47,3 +47,39 @@ var app = {
         console.log('Received Event: ' + id);
     }
 };
+
+//film list
+var filmList = [];
+
+//on click function to add filmName to list
+$("#addToList").click(function() {
+    var filmName = $("#filmName").val();
+    filmList.push(filmName);
+    $.mobile.changePage("#filmListPage", {
+        transition: "pop",
+        changeHash: false
+    });
+});
+
+//on pagechange event 
+$(document).on("pagebeforeshow", "#filmListPage", function() {
+
+    $('#filmName').val("");
+
+    var table = $("#listViewFilms");
+    table.empty();
+    $.each(filmList, function(k, v) {
+        table.append("<li data-icon='delete'><a href='#' class='delete'>" + v + "</a></li>");
+        table.listview('refresh');
+    });
+});
+
+$('.delete a').click(function() {
+    console.log("DELETE");
+    var chosenFilm = $(this);
+    $.each(filmList, function(k,v) {
+        if (v == chosenFilm.text()) {
+            delete filmList[k];
+        }
+    });
+});
